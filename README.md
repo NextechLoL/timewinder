@@ -6,10 +6,10 @@ Ranked ladder distribution viewer for League of Legends. Shows player counts and
 
 ## What it does
 
-**Snapshot view** - Current ladder state broken down by tier and division. Toggle between raw player counts and "Top X%" percentiles. Switch between global scaling (all bars relative to the largest division) and per-tier scaling (bars scaled within their own tier) to zoom into less populated ranks.
+**Snapshot view** - Current ladder state broken down by tier and division. Switch between global scaling (all bars relative to the largest division) and per-tier scaling (bars scaled within their own tier) to zoom into less populated ranks.
 
 **Historical view** - Two modes:
-- *Distribution* - Side-by-side rank distribution for each year, with year-over-year deltas
+- *Distribution* - Distribution chart for historical rank values with a slider for sick UX feel
 - *Trends* - Line chart showing how each tier's ladder share has shifted from 2019 to 2026
 
 Both views support tier filtering and region switching (NA / EU).
