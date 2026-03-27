@@ -307,9 +307,9 @@ export function TrendChart({ region, onViewChange }: TrendChartProps) {
           style={{ height: HEIGHT }}
           className="trend-svg"
           role="img"
-          aria-labelledby="trend-title"
+          aria-label="Rank distribution trends over time"
         >
-          <title id="trend-title">Rank distribution trends over time</title>
+          
           {/* Y gridlines + labels */}
           {yTicks.map(v => {
             const y = yScale(v);
@@ -379,6 +379,7 @@ export function TrendChart({ region, onViewChange }: TrendChartProps) {
                   className={`trend-line${isDimmed ? ' dimmed' : ''}${isHighlighted ? ' highlighted' : ''}`}
                   stroke={line.color}
                   aria-label={line.entry.label}
+                  aria-describedby="chart-tooltip"
                 />
                 {line.points.map(p => (
                   <circle
@@ -394,6 +395,7 @@ export function TrendChart({ region, onViewChange }: TrendChartProps) {
                 <path
                   d={line.pathD}
                   className="trend-hit-area"
+                  aria-describedby="chart-tooltip"
                   onMouseEnter={() => handleLineEnter(line.entry.label)}
                   onMouseMove={e => handleLineMove(line, e)}
                   onMouseLeave={handleLineLeave}
@@ -417,6 +419,7 @@ export function TrendChart({ region, onViewChange }: TrendChartProps) {
       </div>
 
       <Tooltip
+        id="chart-tooltip"
         visible={tooltip.visible}
         title={tooltip.title}
         rows={tooltip.rows}

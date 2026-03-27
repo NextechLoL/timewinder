@@ -275,6 +275,7 @@ export function DistributionView({ region, onViewChange }: DistributionViewProps
         <VerticalBarChart
           groups={barGroups}
           scaleMax={scaleMax}
+          tooltipId="chart-tooltip"
           onBarHover={handleBarHover}
           onBarLeave={handleBarLeave}
         />
@@ -308,6 +309,7 @@ export function DistributionView({ region, onViewChange }: DistributionViewProps
       </div>
 
       <Tooltip
+        id="chart-tooltip"
         visible={tooltip.visible}
         title={tooltip.title}
         rows={tooltip.rows}

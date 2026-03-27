@@ -6,6 +6,7 @@ interface TooltipRow {
 }
 
 interface TooltipProps {
+  id?: string;
   visible: boolean;
   title: string;
   rows: TooltipRow[];
@@ -13,7 +14,7 @@ interface TooltipProps {
   mouseY: number;
 }
 
-export function Tooltip({ visible, title, rows, mouseX, mouseY }: TooltipProps) {
+export function Tooltip({ id, visible, title, rows, mouseX, mouseY }: TooltipProps) {
   const dims = useRef({ w: 200, h: 80 });
 
   const measureRef = useCallback((el: HTMLDivElement | null) => {
@@ -28,7 +29,7 @@ export function Tooltip({ visible, title, rows, mouseX, mouseY }: TooltipProps) 
   return (
     <div
       ref={measureRef}
-      id="chart-tooltip"
+      id={id}
       role="tooltip"
       aria-live="polite"
       className={`tooltip${visible ? ' visible' : ''}`}

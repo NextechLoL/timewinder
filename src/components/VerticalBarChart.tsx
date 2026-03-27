@@ -45,12 +45,13 @@ interface GroupLayout {
 interface VerticalBarChartProps {
   groups: BarGroup[];
   scaleMax: number;
+  tooltipId?: string;
   chartRef?: React.Ref<HTMLDivElement>;
   onBarHover?: (tier: TierName, label: string, e: React.MouseEvent) => void;
   onBarLeave?: () => void;
 }
 
-export function VerticalBarChart({ groups, scaleMax, chartRef, onBarHover, onBarLeave }: VerticalBarChartProps) {
+export function VerticalBarChart({ groups, scaleMax, tooltipId, chartRef, onBarHover, onBarLeave }: VerticalBarChartProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [width, setWidth] = useState(900);
 
@@ -170,11 +171,10 @@ export function VerticalBarChart({ groups, scaleMax, chartRef, onBarHover, onBar
         style={{ height: HEIGHT }}
         className="vbar-svg"
         role="img"
-        aria-labelledby="vbar-title"
+        aria-label="Rank distribution trends over time"
         onMouseMove={handleSvgMouseMove}
         onMouseLeave={onBarLeave}
       >
-        <title id="vbar-title">Rank distribution chart</title>
         {/* Y gridlines + labels */}
         {yTicks.map(v => {
           const y = chartBottom - (v / maxPct) * chartH;
@@ -233,7 +233,7 @@ export function VerticalBarChart({ groups, scaleMax, chartRef, onBarHover, onBar
             height={bar.barH}
             fill={bar.color}
             rx={2}
-            aria-label={`${TIER_CONFIG[bar.tier].label} ${bar.label}: ${bar.value.toFixed(2)}%`}
+            aria-describedby={tooltipId}
           />
         ))}
 
