@@ -86,7 +86,7 @@ export function DistributionView({ region, onViewChange }: DistributionViewProps
       const hasLow = entries.some(e => e.percentages[yearLow] != null);
       const hasHigh = entries.some(e => e.percentages[yearHigh] != null);
 
-      const rows = entries
+      const rows = [...entries].reverse()
         .map(entry => {
           const vLow = entry.percentages[yearLow];
           const vHigh = entry.percentages[yearHigh];
