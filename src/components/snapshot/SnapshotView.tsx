@@ -3,6 +3,8 @@ import type { Region, TierName } from '../../data/types';
 import { TIER_ORDER_DESC, TIER_CONFIG, APEX_TIERS } from '../../data/tiers';
 import {
   getSnapshot,
+  getSnapshotUpdatedAt,
+  formatUpdatedAt,
   groupByTier,
   computeTopPercent,
   totalPlayers,
@@ -41,6 +43,10 @@ export function SnapshotView({ region }: SnapshotViewProps) {
   const grouped = useMemo(() => groupByTier(data), [data]);
   const topPct = useMemo(() => computeTopPercent(data), [data]);
   const total = useMemo(() => totalPlayers(data), [data]);
+  const updatedAt = useMemo(
+    () => formatUpdatedAt(getSnapshotUpdatedAt(region)),
+    [region],
+  );
 
   const globalMax = useMemo(
     () => Math.max(...data.map(e => e.playerCount)),
@@ -125,6 +131,7 @@ export function SnapshotView({ region }: SnapshotViewProps) {
         </div>
         <div className="total-badge">{total.toLocaleString()} players total</div>
       </div>
+      <div className="page-sub">Updated {updatedAt}</div>
 
       <TierFilterPills
         tierOrder={TIER_ORDER_DESC}

@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import type { Region } from '../../data/types';
+import { getHistoricalUpdatedAt, formatUpdatedAt } from '../../data';
 import { DistributionView } from './DistributionView';
 import { TrendChart } from './TrendChart';
 
@@ -11,6 +12,10 @@ interface HistoricalViewProps {
 
 export function HistoricalView({ region }: HistoricalViewProps) {
   const [subView, setSubView] = useState<SubView>('distribution');
+  const updatedAt = useMemo(
+    () => formatUpdatedAt(getHistoricalUpdatedAt(region)),
+    [region],
+  );
 
   return (
     <>
@@ -19,6 +24,7 @@ export function HistoricalView({ region }: HistoricalViewProps) {
           Rank Distribution History ({region === 'EU' ? 'EUW' : 'NA'})
         </div>
       </div>
+      <div className="page-sub">Updated {updatedAt}</div>
 
       {subView === 'distribution' ? (
         <DistributionView

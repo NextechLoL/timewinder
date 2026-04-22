@@ -1,6 +1,28 @@
-import { readFileSync, writeFileSync, mkdirSync } from 'fs';
+import { readFileSync, writeFileSync, mkdirSync, statSync } from 'fs';
+import { execFileSync } from 'child_process';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
+
+function updatedAtFor(filePath: string): string {
+  try {
+    const dirty = execFileSync(
+      'git',
+      ['status', '--porcelain', '--', filePath],
+      { encoding: 'utf-8' },
+    ).trim();
+    if (!dirty) {
+      const stdout = execFileSync(
+        'git',
+        ['log', '-1', '--format=%cI', '--', filePath],
+        { encoding: 'utf-8' },
+      ).trim();
+      if (stdout) return stdout;
+    }
+  } catch {
+    // git not available or not a repo — fall through to mtime
+  }
+  return statSync(filePath).mtime.toISOString();
+}
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, '..');
@@ -31,7 +53,9 @@ function parseSnapshotCsv(filePath: string): string {
     e => `  { tier: '${e.tier}', bracket: '${e.bracket}', playerCount: ${e.playerCount} },`
   );
 
-  return `import type { SnapshotEntry } from '../types';\n\nexport const data: SnapshotEntry[] = [\n${lines_out.join('\n')}\n];\n`;
+  const updatedAt = updatedAtFor(filePath);
+
+  return `import type { SnapshotEntry } from '../types';\n\nexport const updatedAt = '${updatedAt}';\n\nexport const data: SnapshotEntry[] = [\n${lines_out.join('\n')}\n];\n`;
 }
 
 // --- Historical CSV parser ---
@@ -102,7 +126,9 @@ function parseHistoricalCsv(filePath: string): string {
     return `  { tier: '${e.tier}', division: ${div}, label: '${e.label}', percentages: { ${pctEntries} } },`;
   });
 
-  return `import type { HistoricalEntry } from '../types';\n\nexport const data: HistoricalEntry[] = [\n${lines_out.join('\n')}\n];\n`;
+  const updatedAt = updatedAtFor(filePath);
+
+  return `import type { HistoricalEntry } from '../types';\n\nexport const updatedAt = '${updatedAt}';\n\nexport const data: HistoricalEntry[] = [\n${lines_out.join('\n')}\n];\n`;
 }
 
 // --- Generate files ---

@@ -1,8 +1,8 @@
 import type { SnapshotEntry, HistoricalEntry, Region, TierName } from './types';
-import { data as naSnapshot } from './generated/na-snapshot';
-import { data as euSnapshot } from './generated/eu-snapshot';
-import { data as naHistorical } from './generated/na-historical';
-import { data as euHistorical } from './generated/eu-historical';
+import { data as naSnapshot, updatedAt as naSnapshotUpdatedAt } from './generated/na-snapshot';
+import { data as euSnapshot, updatedAt as euSnapshotUpdatedAt } from './generated/eu-snapshot';
+import { data as naHistorical, updatedAt as naHistoricalUpdatedAt } from './generated/na-historical';
+import { data as euHistorical, updatedAt as euHistoricalUpdatedAt } from './generated/eu-historical';
 import { APEX_TIERS } from './tiers';
 
 export type { SnapshotEntry, HistoricalEntry, Region, TierName };
@@ -13,6 +13,22 @@ export function getSnapshot(region: Region): SnapshotEntry[] {
 
 export function getHistorical(region: Region): HistoricalEntry[] {
   return region === 'NA' ? naHistorical : euHistorical;
+}
+
+export function getSnapshotUpdatedAt(region: Region): string {
+  return region === 'NA' ? naSnapshotUpdatedAt : euSnapshotUpdatedAt;
+}
+
+export function getHistoricalUpdatedAt(region: Region): string {
+  return region === 'NA' ? naHistoricalUpdatedAt : euHistoricalUpdatedAt;
+}
+
+export function formatUpdatedAt(iso: string): string {
+  return new Date(iso).toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+  });
 }
 
 /** Group snapshot entries by tier, sorting highest first (apex: LP desc, standard: I→IV) */
